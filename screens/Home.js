@@ -13,11 +13,14 @@ import { mealData, foodData } from "../data/foodData";
 import { SIZES, COLORS, FONTS } from "../constants";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import Header from "../components/Header";
+import DatePicker from "react-native-datepicker";
 
 const Home = ({ navigation }) => {
   const [categories, setCategories] = useState(mealData);
   const [data, setData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [date, setDate] = useState("29-01-2022");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     let temp_data = foodData.breakfast;
@@ -26,13 +29,30 @@ const Home = ({ navigation }) => {
       foodData.snacks,
       foodData.dinner
     );
-    setData(combined_data);
+    let today_data = [];
+    combined_data.map((item) => {
+      if (item.date === date) {
+        today_data.push(item);
+      }
+    });
+    setData(today_data);
   }, []);
 
   function onSelectCategory(category) {
     setSelectedCategory(category);
     let temp_object = { ...foodData };
-    setData(temp_object[category.label]);
+    let new_object = temp_object[category.label];
+    let today_data = [];
+    new_object.map((item) => {
+      if (item.date === date) {
+        today_data.push(item);
+      }
+    });
+    setData(today_data);
+  }
+
+  function onSelectDate(element) {
+    setDate(element);
   }
 
   function renderHeader() {
@@ -105,7 +125,7 @@ const Home = ({ navigation }) => {
             style={{
               marginLeft: SIZES.padding,
               padding: SIZES.padding,
-              paddingBottom: SIZES.padding * 2,
+              // paddingBottom: SIZES.padding,
               backgroundColor:
                 selectedCategory?.id === item.id
                   ? COLORS.primary
@@ -142,7 +162,7 @@ const Home = ({ navigation }) => {
                   selectedCategory?.id === item.id
                     ? COLORS.black
                     : COLORS.white,
-                marginTop: SIZES.padding,
+                marginTop: 10,
 
                 fontWeight: "bold",
               }}
@@ -155,7 +175,7 @@ const Home = ({ navigation }) => {
     };
 
     return (
-      <View style={{ padding: SIZES.padding * 2 }}>
+      <View style={{ padding: SIZES.padding }}>
         <FlatList
           justifyContent="center"
           data={categories}
@@ -163,7 +183,7 @@ const Home = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item) => `${item.id}`}
           renderItem={renderItem}
-          contentContainerStyle={{ paddingVertical: SIZES.padding * 2 }}
+          contentContainerStyle={{ paddingVertical: SIZES.padding }}
         />
       </View>
     );
@@ -173,6 +193,36 @@ const Home = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       {renderHeader()}
       {renderMainCategories()}
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          marginBottom: 10,
+        }}
+      >
+        <DatePicker
+          style={{ width: 200 }}
+          date={date}
+          mode="date"
+          format="DD-MM-YYYY"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              display: "none",
+            },
+            dateInput: {
+              borderColor: COLORS.white,
+              borderRadius: 10,
+            },
+            dateText: {
+              ...FONTS.h2,
+              color: COLORS.primary,
+            },
+          }}
+          onDateChange={(value) => onSelectDate(value)}
+        />
+      </View>
       {renderFoodList()}
     </SafeAreaView>
   );
