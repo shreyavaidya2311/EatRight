@@ -1,11 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const fileUpload = require("express-fileupload");
 const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(cors());
-
+app.use(fileUpload({ useTempFiles: true }));
 // Connect to mongodb
 const URI = process.env.MONGODB_URL;
 mongoose.connect(
@@ -19,7 +20,7 @@ mongoose.connect(
     console.log("Connected to MongoDB");
   }
 );
-
+app.use("/api", require("./routes/upload.js"));
 app.get("/", (req, res) => {
   res.send("this is foodlogger");
 });
