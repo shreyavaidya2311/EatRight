@@ -42,7 +42,9 @@ const Home = ({ navigation }) => {
   function renderFoodList() {
     const renderItem = ({ item }) => {
       return (
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Nutrition", { name: item.name })}
+        >
           <View style={{ margin: 10 }}>
             <Image
               source={item.photo}
