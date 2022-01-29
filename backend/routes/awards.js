@@ -6,7 +6,7 @@ router.get("/get-ranks", async (req, res) => {
 
   let tempArr = [];
   result.forEach((elem) =>
-    tempArr.push({ name: elem.name, points: elem.points })
+    tempArr.push({ name: elem.name, points: elem.points, email: elem.email })
   );
 
   tempArr.sort((a, b) =>

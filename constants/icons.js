@@ -9,6 +9,7 @@ export const dinner = require("../assets/icons/dinner.png");
 export const home = require("../assets/icons/home.png");
 export const logout = require("../assets/icons/logout.png");
 export const profile = require("../assets/icons/profile.png");
+export const target = require("../assets/icons/target.png");
 
 export default {
   report,
@@ -22,4 +23,5 @@ export default {
   home,
   logout,
   profile,
+  target,
 };

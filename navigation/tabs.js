@@ -168,6 +168,27 @@ const Tabs = () => {
       />
 
       <Tab.Screen
+        name="Targets"
+        component={CameraStackNavigator}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={icons.target}
+              resizeMode="contain"
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: focused ? COLORS.primary : COLORS.black,
+                marginBottom: focused ? 0 : 15,
+              }}
+            />
+          ),
+          tabBarButton: (props) => <TabBarCustomButton {...props} />,
+          headerShown: false,
+        }}
+      />
+
+      <Tab.Screen
         name="Friends"
         component={Friends}
         options={{
