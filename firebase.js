@@ -9,6 +9,7 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 import { FIREBASE_API_KEY } from "@env";
+console.log(FIREBASE_API_KEY);
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
   authDomain: "food-logger-930af.firebaseapp.com",

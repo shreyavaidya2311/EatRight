@@ -3,6 +3,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { createContext } from "react";
 const AuthContext = createContext({});
 import * as Google from "expo-google-app-auth";
+// 229459970895-qdjaegn7kjjrbluc7pug8hv1v2t8ium3.apps.googleusercontent.com
 import {
   GoogleAuthProvider,
   onAuthStateChanged,
@@ -11,6 +12,7 @@ import {
 } from "@firebase/auth";
 import { auth } from "../firebase";
 import { AUTH_ANDROID_CLIENT_ID, AUTH_IOS_CLIENT_ID } from "@env";
+import axios from "axios";
 
 const config = {
   androidClientId: AUTH_ANDROID_CLIENT_ID,
@@ -47,7 +49,18 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     await Google.logInAsync(config)
       .then(async (loginResult) => {
+        console.log("");
         if (loginResult.type === "success") {
+          //   login
+          try {
+            await axios.post("http://192.168.1.3:5000/api/users/add-user", {
+              email: loginResult.user.email,
+              name: loginResult.user.name,
+              photo: loginResult.user.photoUrl,
+            });
+          } catch (err) {
+            console.log(err);
+          }
           const { accessToken, idToken } = loginResult;
           const credentials = GoogleAuthProvider.credential(
             idToken,
