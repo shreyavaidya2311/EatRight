@@ -1,9 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import { Camera } from "expo-camera";
 import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import axios from "axios";
 export default function CameraScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -25,9 +33,25 @@ export default function CameraScreen(props) {
       }
     }
   };
-  const handleSave = async (source) => {
-    console.log("camera", source);
-    setSource(null);
+  const handleSave = (source) => {
+    // console.log("camera", source);
+    axios
+      .post("http://192.168.1.8:5000/api/upload", {
+        file: `data:image/jpg;base64,${source.base64}`,
+      })
+      .then((res) => {
+        console.log(res.data);
+        // Object {
+        //   "public_id": "EatRight/y3sphhmjxhhof0wokacj",
+        //   "url": "https://res.cloudinary.com/kartik134/image/upload/v1643450108/EatRight/y3sphhmjxhhof0wokacj.jpg",
+        // }
+        // Alert.alert("EatRight", "Image Uploaded");
+        setSource(null);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        Alert.alert("Error", err.response.data);
+      });
   };
   useEffect(() => {
     (async () => {
