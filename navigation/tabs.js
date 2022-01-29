@@ -11,6 +11,7 @@ import { Home, CameraScreen } from "../screens";
 
 import { COLORS, icons } from "../constants";
 import Friends from "../screens/Friends";
+import CameraStackNavigator from "./CameraStackNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -147,7 +148,7 @@ const Tabs = () => {
 
       <Tab.Screen
         name="Camera"
-        component={CameraScreen}
+        component={CameraStackNavigator}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
