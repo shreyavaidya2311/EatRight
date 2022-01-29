@@ -11,6 +11,10 @@ const FoodSchema = new Schema(
       type: String,
       required: true,
     },
+    imageURL: {
+      type: String,
+      required: true,
+    },
     nutrition: {
       type: Map,
       of: Number,
