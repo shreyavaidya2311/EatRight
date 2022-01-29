@@ -13,6 +13,7 @@ import {
 import { auth } from "../firebase";
 import { AUTH_ANDROID_CLIENT_ID, AUTH_IOS_CLIENT_ID } from "@env";
 import axios from "axios";
+import "../config";
 
 const config = {
   androidClientId: AUTH_ANDROID_CLIENT_ID,
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }) => {
         if (loginResult.type === "success") {
           //   login
           try {
-            await axios.post("http://192.168.1.3:5000/api/users/add-user", {
+            await axios.post(`${global.config.host}/api/users/add-user`, {
               email: loginResult.user.email,
               name: loginResult.user.name,
               photo: loginResult.user.photoUrl,

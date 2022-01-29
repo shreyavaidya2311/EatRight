@@ -1,13 +1,29 @@
 import { StyleSheet, Text, View, Image, SafeAreaView } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import { icons, COLORS, FONTS, images } from "../constants";
 import { Table, Row, Rows, TableWrapper } from "react-native-table-component";
+import "../config";
+import axios from "axios";
 
 const Friends = () => {
   const user = useAuth();
-  const [data, setData] = useState([["1", "Sameer Kavthekar", "100"]]);
-  const [headers, setHeaders] = useState(["Rank", "Name", "Points"]);
+  const [data, setData] = useState([]);
+  const [headers, _] = useState(["Rank", "Name", "Points"]);
+  const [userPoints, setUserPoints] = useState(0);
+
+  useEffect(() => {
+    axios.get(`${global.config.host}/api/awards/get-ranks`).then((res) => {
+      let tempArr = [];
+      let user_points = 0;
+      res.data.ranks.forEach((elem, index) => {
+        tempArr.push([index + 1, elem.name, elem.points]);
+        if (elem.email === user.email) user_points = elem.points;
+      });
+      setData(tempArr);
+      setUserPoints(user_points);
+    });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -86,7 +102,7 @@ const Friends = () => {
               fontSize: 40,
             }}
           >
-            100
+            {userPoints}
           </Text>
         </View>
       </View>
@@ -123,7 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.black,
     height: 20,
   },
-  head: { height: 40, color: "#000" },
+  head: { height: 40 },
   text: { margin: 6, color: COLORS.primary },
 });
 

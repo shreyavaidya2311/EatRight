@@ -15,7 +15,8 @@ router.post("/add-user", async (req, res) => {
 
   try {
     let db_user = await User.find({ email: email });
-    if (db_user === []) return res.status(400).send({ msg: "User exists" });
+    if (db_user.length !== 0)
+      return res.status(400).send({ msg: "User exists" });
     await user.save();
   } catch (err) {
     return res.status(400).send({ msg: err });
