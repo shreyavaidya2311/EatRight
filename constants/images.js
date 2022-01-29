@@ -6,6 +6,7 @@ export const salad = require("../assets/images/salad.jpg");
 export const sushi = require("../assets/images/sushi.jpg");
 export const sandwich = require("../assets/images/sandwich.jpg");
 export const award = require("../assets/images/award.png");
+export const loginImage = require("../assets/images/food-logIlus.png");
 
 export default {
   crispy_chicken_burger,
@@ -16,4 +17,5 @@ export default {
   sushi,
   sandwich,
   award,
+  loginImage,
 };
