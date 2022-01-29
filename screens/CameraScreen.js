@@ -43,7 +43,7 @@ export default function CameraScreen(props) {
     // console.log("camera", source);
     setModalVisible(true);
     axios
-      .post("http://192.168.1.8:5000/api/upload", {
+      .post(`${global.config.host}/api/upload`, {
         file: `data:image/jpg;base64,${source.base64}`,
       })
       .then((res) => {
