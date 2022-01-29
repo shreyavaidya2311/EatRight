@@ -4,9 +4,10 @@ import { COLORS, FONTS } from "../constants";
 import Header from "../components/Header";
 import { Dimensions } from "react-native";
 import { ProgressChart, BarChart } from "react-native-chart-kit";
-import { foodData } from "../data/foodData";
 import DatePicker from "react-native-datepicker";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
+import axios from "axios";
+import useAuth from "../hooks/useAuth";
 
 const Report = () => {
   const [data, setData] = useState();
@@ -14,6 +15,7 @@ const Report = () => {
   const [barData, setBarData] = useState();
   const [date, setDate] = useState("01-2022");
   const [calories, setCalories] = useState();
+  const user = useAuth();
   let total_calories = 0;
   const screenWidth = Dimensions.get("window").width;
   const chartConfig = {
@@ -30,85 +32,99 @@ const Report = () => {
     setDate(element);
   }
   useEffect(() => {
-    let total_breakfast = 0;
-    let total_lunch = 0;
-    let total_snacks = 0;
-    let total_dinner = 0;
-    foodData.breakfast.map((item) => {
-      if (item.date.substring(3, 10) === date) {
-        total_breakfast = total_breakfast + item.calories;
-      }
-    });
-    foodData.lunch.map((item) => {
-      if (item.date.substring(3, 10) === date) {
-        total_lunch = total_lunch + item.calories;
-      }
-    });
-    foodData.snacks.map((item) => {
-      if (item.date.substring(3, 10) === date) {
-        total_snacks = total_snacks + item.calories;
-      }
-    });
-    foodData.dinner.map((item) => {
-      if (item.date.substring(3, 10) === date) {
-        total_dinner = total_dinner + item.calories;
-      }
-    });
-    total_calories =
-      total_breakfast + total_dinner + total_snacks + total_lunch;
-    setCalories(total_calories);
-    let meal_data = [];
-    meal_data.push(total_breakfast);
-    meal_data.push(total_lunch);
-    meal_data.push(total_snacks);
-    meal_data.push(total_dinner);
-    const temp_bar_data = {
-      labels: ["Breakfast", "Lunch", "Snacks", "Dinner"],
-      datasets: [
-        {
-          data: meal_data,
-        },
-      ],
-    };
-    setBarData(temp_bar_data);
-    let temp_data = foodData.breakfast;
-    let combined_data = temp_data.concat(
-      foodData.lunch,
-      foodData.snacks,
-      foodData.dinner
-    );
-    let month_data = [];
-    combined_data.map((item) => {
-      if (item.date.substring(3, 10) === date) {
-        month_data.push(item);
-      }
-    });
+    axios
+      .post(`${global.config.host}/api/food/get-food`, {
+        email: user.user.email,
+      })
+      .then((res) => {
+        let foodData = res.data.foods;
+        let total_breakfast = 0;
+        let total_lunch = 0;
+        let total_snacks = 0;
+        let total_dinner = 0;
+        foodData.breakfast.map((item) => {
+          if (item.date.substring(3, 10) === date) {
+            total_breakfast = total_breakfast + parseInt(item.calories);
+          }
+        });
+        foodData.lunch.map((item) => {
+          if (item.date.substring(3, 10) === date) {
+            total_lunch = total_lunch + parseInt(item.calories);
+          }
+        });
+        foodData.snacks.map((item) => {
+          if (item.date.substring(3, 10) === date) {
+            total_snacks = total_snacks + parseInt(item.calories);
+          }
+        });
+        foodData.dinner.map((item) => {
+          if (item.date.substring(3, 10) === date) {
+            total_dinner = total_dinner + parseInt(item.calories);
+          }
+        });
+        total_calories =
+          total_breakfast + total_dinner + total_snacks + total_lunch;
+        setCalories(total_calories);
+        let meal_data = [];
+        meal_data.push(total_breakfast);
+        meal_data.push(total_lunch);
+        meal_data.push(total_snacks);
+        meal_data.push(total_dinner);
+        const temp_bar_data = {
+          labels: ["Breakfast", "Lunch", "Snacks", "Dinner"],
+          datasets: [
+            {
+              data: meal_data,
+            },
+          ],
+        };
+        setBarData(temp_bar_data);
+        let temp_data = foodData.breakfast;
+        let combined_data = temp_data.concat(
+          foodData.lunch,
+          foodData.snacks,
+          foodData.dinner
+        );
+        let month_data = [];
+        combined_data.map((item) => {
+          if (item.date.substring(3, 10) === date) {
+            month_data.push(item);
+          }
+        });
 
-    let total_carbs = 0;
-    let total_protein = 0;
-    let total_fiber = 0;
-    let total_fat = 0;
-    let total_nutrients = 0;
-    month_data.map((item) => {
-      total_carbs = total_carbs + item.carbohydrates;
-      total_protein = total_protein + item.protein;
-      total_fat = total_carbs + item.fat;
-      total_fiber = total_carbs + item.fiber;
-    });
-    total_nutrients = total_carbs + total_protein + total_fiber + total_fat;
-    let nutrient_data = [];
-    nutrient_data.push(Math.round((total_protein / total_nutrients) * 10) / 10);
-    nutrient_data.push(Math.round((total_carbs / total_nutrients) * 10) / 10);
-    nutrient_data.push(Math.round((total_fat / total_nutrients) * 10) / 10);
-    nutrient_data.push(Math.round((total_fiber / total_nutrients) * 10) / 10);
+        let total_carbs = 0;
+        let total_protein = 0;
+        let total_fiber = 0;
+        let total_fat = 0;
+        let total_nutrients = 0;
+        month_data.map((item) => {
+          total_carbs = total_carbs + parseInt(item.carbohydrates);
+          total_protein = total_protein + parseInt(item.protein);
+          total_fat = total_carbs + parseInt(item.fat);
+          total_fiber = total_carbs + parseInt(item.fiber);
+        });
+        total_nutrients = total_carbs + total_protein + total_fiber + total_fat;
+        let nutrient_data = [];
+        nutrient_data.push(
+          Math.round((total_protein / total_nutrients) * 10) / 10
+        );
+        nutrient_data.push(
+          Math.round((total_carbs / total_nutrients) * 10) / 10
+        );
+        nutrient_data.push(Math.round((total_fat / total_nutrients) * 10) / 10);
+        nutrient_data.push(
+          Math.round((total_fiber / total_nutrients) * 10) / 10
+        );
 
-    let nutrient_label = ["Protein", "Carbs", "Fat", "Fiber"];
-    const new_data = {
-      labels: nutrient_label,
-      data: nutrient_data,
-    };
-    setData(new_data);
-    setLoading(false);
+        let nutrient_label = ["Protein", "Carbs", "Fat", "Fiber"];
+        const new_data = {
+          labels: nutrient_label,
+          data: nutrient_data,
+        };
+        setData(new_data);
+        setLoading(false);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
