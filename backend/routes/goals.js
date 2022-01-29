@@ -1,11 +1,17 @@
 const router = require("express").Router();
+const mongoose = require("mongoose");
 const Goal = require("../models/Goal.model");
 const User = require("../models/User.model");
 
-router.get("/all-goals", async (req, res) => {
+router.get("/all-goals/:email", async (req, res) => {
   try {
-    let goals = await Goal.find();
-    return res.status(200).send({ goals });
+    let email = req.params["email"];
+    console.log(email);
+    let goals = await User.findOne({ email });
+    id_arr = goals.goals.map((elem) => mongoose.Types.ObjectId(elem));
+    let arr = await Goal.find({ _id: { $in: id_arr } });
+    console.log(id_arr);
+    return res.status(200).send({ arr });
   } catch (err) {
     return res.status(500).send({ msg: err.message });
   }

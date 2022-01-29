@@ -8,19 +8,42 @@ import { AnimatedCircularProgress } from "react-native-circular-progress";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import axios from "axios";
 import { ScrollView } from "react-native-gesture-handler";
+import useAuth from "../hooks/useAuth";
 const GoalScreen = () => {
+  const { user } = useAuth();
   const [goalName, setGoalName] = useState("");
   const [currentGoals, setCurrentGoals] = useState([]);
   const [calories, setCalories] = useState(null);
   const [duration, setDuration] = React.useState("daily");
 
   useEffect(async () => {
-    const res = await axios.get(`${global.config.host}/api/goals/all-goals`);
-    setCurrentGoals(res.data.goals);
+    try {
+      console.log(user.email);
+      const res = await axios.get(
+        `${global.config.host}/api/goals/all-goals/${user.email}`
+      );
+      setCurrentGoals(res.data.arr);
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
-  const handleSubmit = () => {
-    Alert.alert(`Goal ${calories} Calories Set Successfully`);
+  const handleSubmit = async () => {
+    // setCurrentGoals(()=>)
+    console.log(user);
+    let res = await axios.post(`${global.config.host}/api/goals/add-goal`, {
+      duration_type: duration,
+      email: user.email,
+      activity_type: goalName,
+      final_goal: calories,
+    });
+    // console.log(res.data.msg);
+    let newGoal = res.data.msg;
+    setCurrentGoals((prev) => [...prev, newGoal]);
+    Alert.alert(`Goal Set Successfully`);
+
+    setGoalName(null);
+    setDuration(null);
     setCalories(null);
   };
   const GoalCard = ({ name, duration, calories, current, final_amount }) => {
@@ -167,6 +190,7 @@ const GoalScreen = () => {
             scrollEnabled={false}
             data={currentGoals}
             keyExtractor={(item) => item._id}
+            inverted={true}
             renderItem={({ item }) => {
               return (
                 <GoalCard
