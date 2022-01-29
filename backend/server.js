@@ -4,8 +4,9 @@ const mongoose = require("mongoose");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb" }));
 app.use(fileUpload({ useTempFiles: true }));
 // Connect to mongodb
 const URI = process.env.MONGODB_URL;
