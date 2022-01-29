@@ -23,6 +23,7 @@ mongoose.connect(
 );
 app.use("/api", require("./routes/upload.js"));
 app.use("/api/users", require("./routes/users"));
+app.use("/api/awards", require("./routes/awards"));
 
 app.get("/", (req, res) => {
   res.send("this is foodlogger");
