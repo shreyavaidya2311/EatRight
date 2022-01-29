@@ -19,6 +19,10 @@ const GoalSchema = new Schema(
       type: Number,
       default: 0,
     },
+    date: {
+      type: Date,
+      default: new Date(),
+    },
   },
   { strict: false }
 );
