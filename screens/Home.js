@@ -5,21 +5,20 @@ import {
   SafeAreaView,
   Image,
   FlatList,
-  Platform,
   Text,
-  Button,
+  TouchableOpacity,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
 import { mealData, foodData } from "../data/foodData";
-import { icons, SIZES, COLORS, FONTS } from "../constants";
+import { SIZES, COLORS, FONTS } from "../constants";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import useAuth from "../hooks/useAuth";
+import Header from "../components/Header";
 
 const Home = ({ navigation }) => {
   const [categories, setCategories] = useState(mealData);
   const [data, setData] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const { user, LogOut } = useAuth();
+  const [selectedCategory, setSelectedCategory] = useState("");
+
   useEffect(() => {
     let temp_data = foodData.breakfast;
     let combined_data = temp_data.concat(
@@ -37,36 +36,7 @@ const Home = ({ navigation }) => {
   }
 
   function renderHeader() {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          height: 50,
-          marginTop: Platform.OS == "android" ? 45 : 0,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Image
-            source={icons.logo}
-            style={{
-              width: 42,
-              height: 42,
-              marginRight: 10,
-            }}
-          />
-          <Text style={{ ...FONTS.largeTitle, color: COLORS.white }}>
-            Food Logger
-          </Text>
-        </View>
-      </View>
-    );
+    return <Header />;
   }
 
   function renderFoodList() {
@@ -128,51 +98,57 @@ const Home = ({ navigation }) => {
   function renderMainCategories() {
     const renderItem = ({ item }) => {
       return (
-        <TouchableOpacity
-          style={{
-            marginLeft: SIZES.padding,
-            padding: SIZES.padding,
-            paddingBottom: SIZES.padding * 2,
-            backgroundColor:
-              selectedCategory?.id === item.id ? COLORS.primary : COLORS.black,
-            borderRadius: SIZES.radius,
-            alignItems: "center",
-            justifyContent: "center",
-            ...styles.shadow,
-          }}
-          onPress={() => onSelectCategory(item)}
-        >
-          <View
+        <>
+          <TouchableOpacity
             style={{
-              backgroundColor: COLORS.black,
-              width: 55,
-              height: 55,
-              borderRadius: 30,
+              marginLeft: SIZES.padding,
+              padding: SIZES.padding,
+              paddingBottom: SIZES.padding * 2,
+              backgroundColor:
+                selectedCategory?.id === item.id
+                  ? COLORS.primary
+                  : COLORS.black,
+              borderRadius: SIZES.radius,
               alignItems: "center",
               justifyContent: "center",
+              ...styles.shadow,
             }}
+            onPress={() => onSelectCategory(item)}
           >
-            <Image
-              source={item.icon}
-              resizeMode="contain"
+            <View
               style={{
-                height: 35,
-                width: 35,
+                backgroundColor: COLORS.black,
+                width: 55,
+                height: 55,
+                borderRadius: 30,
+                alignItems: "center",
+                justifyContent: "center",
               }}
-            />
-          </View>
-          <Text
-            style={{
-              color:
-                selectedCategory?.id === item.id ? COLORS.black : COLORS.white,
-              marginTop: SIZES.padding,
+            >
+              <Image
+                source={item.icon}
+                resizeMode="contain"
+                style={{
+                  height: 35,
+                  width: 35,
+                }}
+              />
+            </View>
+            <Text
+              style={{
+                color:
+                  selectedCategory?.id === item.id
+                    ? COLORS.black
+                    : COLORS.white,
+                marginTop: SIZES.padding,
 
-              fontWeight: "bold",
-            }}
-          >
-            {item.name}
-          </Text>
-        </TouchableOpacity>
+                fontWeight: "bold",
+              }}
+            >
+              {item.name}
+            </Text>
+          </TouchableOpacity>
+        </>
       );
     };
 
@@ -196,7 +172,6 @@ const Home = ({ navigation }) => {
       {renderHeader()}
       {renderMainCategories()}
       {renderFoodList()}
-      <Button title="Log Out" onPress={LogOut} />
     </SafeAreaView>
   );
 };
