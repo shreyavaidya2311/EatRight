@@ -7,6 +7,8 @@ export const lunch = require("../assets/icons/lunch.png");
 export const snacks = require("../assets/icons/snacks.png");
 export const dinner = require("../assets/icons/dinner.png");
 export const home = require("../assets/icons/home.png");
+export const logout = require("../assets/icons/logout.png");
+export const profile = require("../assets/icons/profile.png");
 
 export default {
   report,
@@ -18,4 +20,6 @@ export default {
   snacks,
   dinner,
   home,
+  logout,
+  profile,
 };
