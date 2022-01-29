@@ -13,7 +13,7 @@ import { FOOD_DATABASE_APP_ID, FOOD_DATABASE_APP_KEY } from "@env";
 import axios from "axios";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import ProgressBar from "react-native-animated-progress";
-
+import { ActivityIndicator, Colors } from "react-native-paper";
 const NutritionContent = ({ route, navigation }) => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
@@ -31,7 +31,15 @@ const NutritionContent = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       {loading ? (
-        <></>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator
+            animating={true}
+            size={80}
+            color={COLORS.primary}
+          />
+        </View>
       ) : (
         <>
           <Header />
