@@ -8,12 +8,13 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-
-import { mealData, foodData } from "../data/foodData";
-import { SIZES, COLORS, FONTS } from "../constants";
+import axios from "axios";
+import { mealData } from "../data/foodData";
+import { SIZES, COLORS, FONTS, images } from "../constants";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import Header from "../components/Header";
 import DatePicker from "react-native-datepicker";
+import useAuth from "../hooks/useAuth";
 
 const Home = ({ navigation }) => {
   const [categories, setCategories] = useState(mealData);
@@ -21,22 +22,32 @@ const Home = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [date, setDate] = useState("29-01-2022");
   const [open, setOpen] = useState(false);
+  const [foodData, setFoodData] = useState({});
+  const user = useAuth();
 
   useEffect(() => {
-    let temp_data = foodData.breakfast;
-    let combined_data = temp_data.concat(
-      foodData.lunch,
-      foodData.snacks,
-      foodData.dinner
-    );
-    let today_data = [];
-    combined_data.map((item) => {
-      if (item.date === date) {
-        today_data.push(item);
-      }
-    });
-    setData(today_data);
-  }, []);
+    axios
+      .post(`${global.config.host}/api/food/get-food`, {
+        email: user.user.email,
+      })
+      .then((res) => {
+        let foodData = res.data.foods;
+        let temp_data = foodData.breakfast;
+        let combined_data = temp_data.concat(
+          foodData.lunch,
+          foodData.snacks,
+          foodData.dinner
+        );
+        let today_data = [];
+        combined_data.map((item) => {
+          if (item.date === date) {
+            today_data.push(item);
+          }
+        });
+        setData(today_data);
+        setFoodData(foodData);
+      });
+  }, [date]);
 
   function onSelectCategory(category) {
     setSelectedCategory(category);
@@ -67,7 +78,7 @@ const Home = ({ navigation }) => {
         >
           <View style={{ margin: 10 }}>
             <Image
-              source={item.photo}
+              source={{ uri: item.photo }}
               resizeMode="cover"
               style={{
                 width: "100%",
@@ -220,7 +231,7 @@ const Home = ({ navigation }) => {
               color: COLORS.primary,
             },
           }}
-          onDateChange={(value) => onSelectDate(value)}
+          onDateChange={(value) => setDate(value)}
         />
       </View>
       {renderFoodList()}
