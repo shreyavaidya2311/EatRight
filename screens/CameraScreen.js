@@ -8,185 +8,123 @@ import {
   Alert,
   Modal,
   FlatList,
+  SafeAreaView,
+  ScrollView,
 } from "react-native";
 import { COLORS } from "../constants";
 import { Camera } from "expo-camera";
 import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { Button } from "react-native-paper";
+import {
+  Button,
+  ActivityIndicator,
+  Colors,
+  TextInput,
+} from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
-import { RadioButton, ScrollView } from "react-native-paper";
+import { FOOD_DATABASE_APP_ID, FOOD_DATABASE_APP_KEY } from "@env";
+import useAuth from "../hooks/useAuth";
+
 export default function CameraScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [isFlashON, setIsFlashON] = useState(Camera.Constants.FlashMode.off);
   const [source, setSource] = useState("");
-  const [imgData, setImgData] = useState(null);
+  const [imgData, setImgData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [foodName, setFoodName] = React.useState();
+  const [foodName, setFoodName] = useState();
+  const [url, setURL] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const [cals, setCals] = useState(0);
+  const [carbs, setCarbs] = useState(0);
+  const [prots, setProts] = useState(0);
+  const [fibers, setFibers] = useState(0);
+  const [fats, setFats] = useState(0);
+  const [food_type, setFoodType] = useState("breakfast");
   const cam = useRef();
   const isFocused = useIsFocused();
+  const user = useAuth();
+
   const _takePicture = async () => {
     const option = {
       quality: 0.8,
       base64: true,
-      skipProcessing: false,
+      skipProcessing: true,
     };
     if (cam.current) {
       const photo = await cam.current.takePictureAsync(option);
-      // console.log(Object.keys(photo));
-      // console.log(photo.uri, source);
       if (photo.base64) {
+        setImgData([]);
+        setFoodName(null);
         setSource(photo);
+        setClicked(false);
+        setModalVisible(false);
+        setLoading(true);
+        setCals(0);
+        setCarbs(0);
+        setProts(0);
+        setFibers(0);
+        setFats(0);
       }
     }
   };
+
   const handleSave = (source) => {
-    // console.log("camera", source);
     setModalVisible(true);
-    // axios
-    //   .post(`${global.config.host}/api/upload`, {
-    //     file: `data:image/jpg;base64,${source.base64}`,
-    //   })
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     // Object {
-    //     //   "public_id": "EatRight/y3sphhmjxhhof0wokacj",
-    //     //   "url": "https://res.cloudinary.com/kartik134/image/upload/v1643450108/EatRight/y3sphhmjxhhof0wokacj.jpg",
-    //     // }
-    //     // Alert.alert("EatRight", "Image Uploaded");
-    //     setSource(null);
-    //     setImgData(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err.response.data);
-    //     Alert.alert("Error", err.response.data);
-    //   });
-    setImgData([
-      { id: "ai_skxkRfDl", name: "cake", value: 0.8173249, app_id: "main" },
-      {
-        id: "ai_FnZCSVMH",
-        name: "cheese",
-        value: 0.05843158,
-        app_id: "main",
-      },
-      {
-        id: "ai_b4b4hLRV",
-        name: "turkey",
-        value: 0.030007755,
-        app_id: "main",
-      },
-      {
-        id: "ai_w68d36Ks",
-        name: "bread",
-        value: 0.026850646,
-        app_id: "main",
-      },
-      {
-        id: "ai_jmcSl8c1",
-        name: "bacon",
-        value: 0.025388198,
-        app_id: "main",
-      },
-      {
-        id: "ai_MsJXFg9r",
-        name: "birthday cake",
-        value: 0.021305881,
-        app_id: "main",
-      },
-      {
-        id: "ai_ZHtk2LRK",
-        name: "potato",
-        value: 0.011976058,
-        app_id: "main",
-      },
-      {
-        id: "ai_KWmFf1fn",
-        name: "meat",
-        value: 0.010327755,
-        app_id: "main",
-      },
-      {
-        id: "ai_rrs6pHmR",
-        name: "hash",
-        value: 0.008335112,
-        app_id: "main",
-      },
-      {
-        id: "ai_wh3P1BKX",
-        name: "carrot cake",
-        value: 0.007329989,
-        app_id: "main",
-      },
-      {
-        id: "ai_s7nSB81X",
-        name: "tacos",
-        value: 0.00480614,
-        app_id: "main",
-      },
-      {
-        id: "ai_ndkzmqnK",
-        name: "cereal",
-        value: 0.004639528,
-        app_id: "main",
-      },
-      {
-        id: "ai_mPjqBnPk",
-        name: "carrot",
-        value: 0.0043322365,
-        app_id: "main",
-      },
-      {
-        id: "ai_7dcVtHqc",
-        name: "lamb",
-        value: 0.003883064,
-        app_id: "main",
-      },
-      {
-        id: "ai_7bPDsM3z",
-        name: "brisket",
-        value: 0.0035047615,
-        app_id: "main",
-      },
-      {
-        id: "ai_p5Hb83Hf",
-        name: "cottage cheese",
-        value: 0.0033310852,
-        app_id: "main",
-      },
-      {
-        id: "ai_pFX4Wrwz",
-        name: "kale",
-        value: 0.0032779747,
-        app_id: "main",
-      },
-      {
-        id: "ai_BQb2KDKr",
-        name: "yogurt",
-        value: 0.003241079,
-        app_id: "main",
-      },
-      {
-        id: "ai_LGL1LmZD",
-        name: "whipped cream",
-        value: 0.0032398237,
-        app_id: "main",
-      },
-      {
-        id: "ai_bkKjGgB0",
-        name: "oatmeal",
-        value: 0.002980678,
-        app_id: "main",
-      },
-    ]);
+    axios
+      .post(`${global.config.host}/api/upload`, {
+        file: `data:image/jpg;base64,${source.base64}`,
+      })
+      .then((res) => {
+        setImgData(res.data.data);
+        setURL(res.data.url);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        Alert.alert("Error", err.response.data);
+      });
   };
-  // useEffect(async () => {
-  //   //  const res=await axios.get("")
-  //   const url =
-  //     "https://res.cloudinary.com/kartik134/image/upload/v1643450108/EatRight/wkxdut9qvv1owd2d3oub.jpg";
-  // }, [imgData]);
+
+  const handleDoneClick = () => {
+    axios
+      .get(
+        `https://api.edamam.com/api/food-database/v2/parser?app_id=${FOOD_DATABASE_APP_ID}&app_key=${FOOD_DATABASE_APP_KEY}&ingr=${foodName}`
+      )
+      .then((res) => {
+        console.log(res.data.hints[0].food.nutrients);
+        setCals("" + res.data.hints[0].food.nutrients["ENERC_KCAL"]);
+        setCarbs("" + res.data.hints[0].food.nutrients["CHOCDF"]);
+        setProts("" + res.data.hints[0].food.nutrients["PROCNT"]);
+        setFibers("" + res.data.hints[0].food.nutrients["FIBTG"]);
+        setFats("" + res.data.hints[0].food.nutrients["FAT"]);
+        setClicked(true);
+      });
+  };
+
+  const handleFinish = () => {
+    axios
+      .post(`${global.config.host}/api/food/add-food`, {
+        name: foodName,
+        cals,
+        carbs,
+        prots,
+        fats,
+        fibers,
+        url,
+        food_type,
+        email: user.user.email,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setModalVisible(false);
+      })
+      .catch((err) => console.log(err));
+    setSource(null);
+  };
+
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -197,9 +135,11 @@ export default function CameraScreen(props) {
   if (hasPermission === null) {
     return <View />;
   }
+
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
   return (
     isFocused && (
       <View style={styles.container}>
@@ -237,6 +177,10 @@ export default function CameraScreen(props) {
             autoFocus="on"
             flashMode={isFlashON}
             type={type}
+            useCamera2Api={true}
+            skipProcessing={true}
+            zoom={0}
+            ratio={"16:9"}
           >
             <View style={styles.buttonContainer}>
               <TouchableOpacity
@@ -282,7 +226,7 @@ export default function CameraScreen(props) {
         <Modal animationType="slide" transparent={true} visible={modalVisible}>
           <View
             style={{
-              height: "50%",
+              height: "80%",
               marginTop: "auto",
             }}
           >
@@ -318,36 +262,132 @@ export default function CameraScreen(props) {
                 >
                   Confirm Your Food Item
                 </Text>
-                <RadioButton.Group
-                  onValueChange={(newValue) => setFoodName(newValue)}
-                  value={foodName}
-                  style={{
-                    flexDirection: "row",
-                  }}
-                >
-                  <FlatList
-                    horizontal
-                    data={imgData}
-                    renderItem={({ item }) => {
-                      return (
-                        <View style={styles.foodItem}>
-                          <Text>{item.name}</Text>
-                          <RadioButton value={item.name} />
+                {clicked ? (
+                  <View style={{ marginTop: 10 }}>
+                    <SafeAreaView>
+                      <ScrollView>
+                        <TextInput
+                          label="Item Name"
+                          value={foodName}
+                          onChangeText={(text) => setFoodName(text)}
+                          style={{ marginTop: 10 }}
+                        />
+                        <TextInput
+                          label="Calories"
+                          value={cals}
+                          onChangeText={(text) => setCals(text)}
+                          style={{ marginTop: 10 }}
+                        />
+                        <TextInput
+                          label="Carbohydrates"
+                          value={carbs}
+                          onChangeText={(text) => setCarbs(text)}
+                          style={{ marginTop: 10 }}
+                        />
+                        <TextInput
+                          label="Proteins"
+                          value={prots}
+                          onChangeText={(text) => setProts(text)}
+                          style={{ marginTop: 10 }}
+                        />
+                        <TextInput
+                          label="Fats"
+                          value={fats}
+                          onChangeText={(text) => setFats(text)}
+                          style={{ marginTop: 10 }}
+                        />
+                        <TextInput
+                          label="Fibers"
+                          value={fibers}
+                          onChangeText={(text) => setFibers(text)}
+                          style={{ marginTop: 10 }}
+                        />
+                        <TextInput
+                          label="Food Type"
+                          value={food_type}
+                          onChangeText={(text) => setFoodType(text)}
+                          style={{ marginTop: 10 }}
+                        />
+                        {/* <Picker
+                          selectedValue={food_type}
+                          style={{ height: 50, width: 150 }}
+                          onValueChange={(itemValue, itemIndex) =>
+                            setFoodType(itemValue)
+                          }
+                        >
+                          <Picker.Item label="Breakfast" value="breakfast" />
+                          <Picker.Item label="Lunch" value="lunch" />
+                          <Picker.Item label="Snacks" value="snacks" />
+                          <Picker.Item label="Dinner" value="dinner" />
+                        </Picker> */}
+                        <View
+                          style={{
+                            alignItems: "center",
+                            marginTop: 30,
+                          }}
+                        >
+                          <Button
+                            mode="contained"
+                            onPress={handleFinish}
+                            style={{
+                              width: "30%",
+                              marginTop: 10,
+                              marginBottom: 10,
+                            }}
+                          >
+                            Done
+                          </Button>
                         </View>
-                      );
-                    }}
-                    keyExtractor={(item) => item.id}
-                  />
-                </RadioButton.Group>
-              </View>
-              <View>
-                <Button
-                  mode="contained"
-                  style={{ width: "30%" }}
-                  onPress={() => console.log("Pressed")}
-                >
-                  Done
-                </Button>
+                      </ScrollView>
+                    </SafeAreaView>
+                  </View>
+                ) : (
+                  <>
+                    {imgData ? (
+                      <>
+                        <FlatList
+                          horizontal
+                          data={imgData}
+                          renderItem={({ item }) => {
+                            return (
+                              <View style={styles.foodItem}>
+                                <Button
+                                  value={item.name}
+                                  onPress={() => setFoodName(item.name)}
+                                  color="#000"
+                                  mode="outlined"
+                                  icon={item.name === foodName && "check"}
+                                >
+                                  {item.name.toUpperCase()}
+                                </Button>
+                              </View>
+                            );
+                          }}
+                          keyExtractor={(item) => item.id}
+                        />
+                        <View
+                          style={{
+                            alignItems: "center",
+                            marginTop: 30,
+                          }}
+                        >
+                          <Button
+                            mode="contained"
+                            onPress={handleDoneClick}
+                            style={{ width: "30%" }}
+                          >
+                            Proceed
+                          </Button>
+                        </View>
+                      </>
+                    ) : (
+                      <ActivityIndicator
+                        animating={true}
+                        color={Colors.red800}
+                      />
+                    )}
+                  </>
+                )}
               </View>
             </View>
           </View>
@@ -366,16 +406,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   foodItem: {
-    flexDirection: "row",
-    justifyContent: "center",
-    borderWidth: 1,
     margin: 10,
-    paddingHorizontal: 10,
-    borderRadius: 25,
-    borderColor: COLORS.secondary,
+    borderRadius: 7,
     backgroundColor: COLORS.primary,
-    color: "#fff",
-    alignItems: "center",
   },
   camera: {
     flex: 1,

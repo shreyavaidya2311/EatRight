@@ -59,14 +59,9 @@ const NutritionContent = ({ route, navigation }) => {
               style={{ marginTop: 50, marginBottom: 40 }}
             >
               {(fill) => (
-                <>
-                  <Text style={{ ...FONTS.h3, color: COLORS.white }}>
-                    {Math.round(fill)}
-                  </Text>
-                  <Text style={{ ...FONTS.body4, color: COLORS.white }}>
-                    calories
-                  </Text>
-                </>
+                <Text style={{ ...FONTS.h3, color: COLORS.white }}>
+                  {Math.round(fill)}
+                </Text>
               )}
             </AnimatedCircularProgress>
             <Text

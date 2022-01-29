@@ -3,11 +3,12 @@ const cloudinary = require("cloudinary");
 const imageRecognizer = require("../controllers/ImageRecognizer.js");
 // we will upload image on cloudinary
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET,
+  cloud_name: "dyt4b3so9",
+  api_key: "384554139957286",
+  api_secret: "nK3JCEcr8v5b2R_t-KmrJ5697PQ",
   secure: true,
 });
+
 router.post("/upload", async (req, res) => {
   try {
     if (req.body) {
@@ -28,10 +29,8 @@ router.post("/upload", async (req, res) => {
           appClarifai.models
             .predict("food-item-recognition", url)
             .then((data) => {
-              console.log(data.rawData.outputs[0].data.concepts);
               data = data.rawData.outputs[0].data.concepts;
-              console.log(data);
-              res.status(200).send(data);
+              res.status(200).send({ data, url });
             })
             .catch((err) => res.status(400).json("unable to work api"));
         }

@@ -10,7 +10,6 @@ const CameraStackNavigator = () => {
       }}
     >
       <Stack.Screen name="CameraHome" component={CameraScreen} />
-      <Stack.Screen name="Camera2" component={CameraScreen} />
     </Stack.Navigator>
   );
 };
