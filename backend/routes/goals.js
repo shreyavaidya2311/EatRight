@@ -2,6 +2,15 @@ const router = require("express").Router();
 const Goal = require("../models/Goal.model");
 const User = require("../models/User.model");
 
+router.get("/all-goals", async (req, res) => {
+  try {
+    let goals = await Goal.find();
+    return res.status(200).send({ goals });
+  } catch (err) {
+    return res.status(500).send({ msg: err.message });
+  }
+});
+
 router.post("/add-goal", async (req, res) => {
   let { duration_type, activity_type, final_goal, email } = req.body;
 

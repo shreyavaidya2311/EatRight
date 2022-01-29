@@ -1,6 +1,6 @@
 import Home from "./Home";
-import CameraScreen from "./CameraScreen";
+import GoalScreen from "./GoalScreen";
 import NutritionContent from "./NutritionContent";
 import Report from "./Report";
 
-export { Home, CameraScreen, NutritionContent, Report };
+export { Home, GoalScreen, NutritionContent, Report };
