@@ -2,7 +2,6 @@ import { StyleSheet, Text, SafeAreaView, View, Image } from "react-native";
 
 import React from "react";
 import useAuth from "../hooks/useAuth";
-import Header from "../components/Header";
 import { Button } from "react-native-paper";
 
 import { icons, COLORS, FONTS } from "../constants";
@@ -11,32 +10,57 @@ const LoginScreen = () => {
   const { signInWithGoogle } = useAuth();
   return (
     <SafeAreaView style={styles.container}>
-      <Header />
       <View style={{ flex: 1 }}>
         <View>
-          <Image
-            source={loginImage}
+          <View
             style={{
-              width: "80%",
-              height: "70%",
-              alignSelf: "center",
+              flexDirection: "row",
+
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 130,
             }}
-          />
+          >
+            <Image
+              source={icons.logo}
+              style={{
+                width: 42,
+                height: 42,
+                marginRight: 10,
+              }}
+            />
+
+            <Text style={{ ...FONTS.largeTitle, color: COLORS.white }}>
+              EatRight
+            </Text>
+          </View>
           <Text
             style={{
-              color: "white",
+              ...FONTS.h2,
+              color: COLORS.primary,
               fontSize: 24,
               justifyContent: "center",
               alignSelf: "center",
-              marginBottom: 10,
+              marginBottom: 40,
+              marginLeft: 15,
             }}
           >
-            Eat Right To Weigh Right
+            to weigh right
           </Text>
+          <Image
+            source={loginImage}
+            style={{
+              width: 350,
+              height: 350,
+              alignSelf: "center",
+              marginBottom: 40,
+            }}
+          />
         </View>
         <View style={{ margin: 20 }}>
           <Text
             style={{
+              ...FONTS.h2,
               color: "white",
               fontSize: 24,
               justifyContent: "center",
@@ -48,6 +72,7 @@ const LoginScreen = () => {
           </Text>
           <Button
             icon="google"
+            color={COLORS.primary}
             mode="contained"
             style={{
               width: "70%",
