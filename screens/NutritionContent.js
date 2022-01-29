@@ -18,6 +18,7 @@ const NutritionContent = ({ route, navigation }) => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    console.log();
     axios
       .get(
         `https://api.edamam.com/api/food-database/v2/parser?app_id=${FOOD_DATABASE_APP_ID}&app_key=${FOOD_DATABASE_APP_KEY}&ingr=${route.params.name}`
