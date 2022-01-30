@@ -76,11 +76,23 @@ const Friends = () => {
       {!loading && (
         <>
           <Header />
+          <Text
+            style={{
+              color: COLORS.white,
+              ...FONTS.body4,
+              alignSelf: "center",
+              textAlign: "center",
+              margin: 30,
+            }}
+          >
+            For every goal you achieve, we will be making a contribution to The
+            Feeding India Program on your behalf
+          </Text>
           <View
             style={{
               flexDirection: "row",
               height: 50,
-              marginTop: 85,
+              marginTop: 25,
             }}
           >
             <View
