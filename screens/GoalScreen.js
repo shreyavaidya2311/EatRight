@@ -9,12 +9,15 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import axios from "axios";
 import { ScrollView } from "react-native-gesture-handler";
 import useAuth from "../hooks/useAuth";
+import { useIsFocused } from "@react-navigation/native";
+
 const GoalScreen = () => {
   const { user } = useAuth();
   const [goalName, setGoalName] = useState("");
   const [currentGoals, setCurrentGoals] = useState([]);
   const [calories, setCalories] = useState(null);
   const [duration, setDuration] = useState("daily");
+  const isFocused = useIsFocused();
 
   useEffect(async () => {
     try {
@@ -27,7 +30,7 @@ const GoalScreen = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [isFocused]);
 
   const handleSubmit = async () => {
     // setCurrentGoals(()=>)
@@ -75,6 +78,7 @@ const GoalScreen = () => {
     let percent = Math.round(
       (parseInt(current) * 100) / parseInt(final_amount)
     );
+    console.log(current, final_amount, percent);
     let new_date = new Date(date).getTime();
     let next_day = new_date + 1 * 24 * 60 * 60 * 1000;
     let curr_date = new Date("2 February 2022").getTime();

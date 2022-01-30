@@ -77,6 +77,7 @@ export default function CameraScreen(props) {
     axios
       .post(`${global.config.host}/api/upload`, {
         file: `data:image/jpg;base64,${source.base64}`,
+        email: user.user.email,
       })
       .then((res) => {
         setImgData(res.data.data);

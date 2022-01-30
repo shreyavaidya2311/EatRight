@@ -15,6 +15,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import Header from "../components/Header";
 import DatePicker from "react-native-datepicker";
 import useAuth from "../hooks/useAuth";
+import { useIsFocused } from "@react-navigation/native";
 
 const Home = ({ navigation }) => {
   const [categories, setCategories] = useState(mealData);
@@ -24,6 +25,7 @@ const Home = ({ navigation }) => {
   const [open, setOpen] = useState(false);
   const [foodData, setFoodData] = useState({});
   const user = useAuth();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     axios
@@ -47,7 +49,7 @@ const Home = ({ navigation }) => {
         setData(today_data);
         setFoodData(foodData);
       });
-  }, [date]);
+  }, [date, isFocused]);
 
   function onSelectCategory(category) {
     setSelectedCategory(category);

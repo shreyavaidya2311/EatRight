@@ -8,6 +8,8 @@ cloudinary.config({
   api_secret: "nK3JCEcr8v5b2R_t-KmrJ5697PQ",
   secure: true,
 });
+const User = require("../models/User.model");
+const Goal = require("../models/Goal.model");
 
 router.post("/upload", async (req, res) => {
   try {
