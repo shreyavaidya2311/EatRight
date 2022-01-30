@@ -5,7 +5,8 @@ import { useFonts } from "expo-font";
 import { AuthProvider } from "./hooks/useAuth";
 import StackNavigator from "./StackNavigator";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
-
+import { LogBox } from "react-native";
+LogBox.ignoreAllLogs();
 const App = () => {
   let [fontsLoaded] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
