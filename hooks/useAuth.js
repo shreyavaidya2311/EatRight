@@ -18,12 +18,7 @@ import "../config";
 const config = {
   androidClientId: AUTH_ANDROID_CLIENT_ID,
   iosClientId: AUTH_IOS_CLIENT_ID,
-  scopes: [
-    "profile",
-    "email",
-    "https://www.googleapis.com/auth/fitness.nutrition.read",
-    "https://www.googleapis.com/auth/fitness.nutrition.write",
-  ],
+  scopes: ["profile", "email"],
   permissions: ["public_profile", "email", "gender", "location"],
 };
 export const AuthProvider = ({ children }) => {
@@ -58,6 +53,7 @@ export const AuthProvider = ({ children }) => {
         console.log("");
         if (loginResult.type === "success") {
           //   login
+          console.log(loginResult);
           try {
             await axios.post(`${global.config.host}/api/users/add-user`, {
               email: loginResult.user.email,

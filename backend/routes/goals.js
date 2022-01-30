@@ -2,7 +2,6 @@ const router = require("express").Router();
 const mongoose = require("mongoose");
 const Goal = require("../models/Goal.model");
 const User = require("../models/User.model");
-const mongoose = require("mongoose");
 
 router.get("/all-goals/:email", async (req, res) => {
   try {

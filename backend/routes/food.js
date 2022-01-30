@@ -63,6 +63,7 @@ router.post("/get-food", async (req, res) => {
   if (!email) return res.status(400).send({ msg: "Invalid params" });
 
   let user = await User.findOne({ email });
+  console.log(user);
   return res.status(200).send({ foods: user.foods });
 });
 
