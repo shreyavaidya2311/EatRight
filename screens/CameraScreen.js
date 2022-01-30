@@ -11,7 +11,7 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { COLORS } from "../constants";
+import { COLORS, FONTS } from "../constants";
 import { Camera } from "expo-camera";
 import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
@@ -245,14 +245,10 @@ export default function CameraScreen(props) {
                   />
                 </TouchableOpacity>
               </View>
-              <View
-                style={{
-                  borderColor: "#333",
-                  borderBottomWidth: 1,
-                }}
-              >
+              <View>
                 <Text
                   style={{
+                    ...FONTS.h2,
                     color: "#eee",
                     fontSize: 20,
                     paddingHorizontal: 10,
@@ -270,43 +266,78 @@ export default function CameraScreen(props) {
                           label="Item Name"
                           value={foodName}
                           onChangeText={(text) => setFoodName(text)}
-                          style={{ marginTop: 10 }}
+                          style={{
+                            marginTop: 10,
+                            borderColor: COLORS.primary,
+                            borderWidth: 3,
+                            height: 55,
+                          }}
                         />
                         <TextInput
                           label="Calories"
                           value={cals}
                           onChangeText={(text) => setCals(text)}
-                          style={{ marginTop: 10 }}
+                          style={{
+                            marginTop: 10,
+                            borderColor: COLORS.primary,
+                            borderWidth: 3,
+                            height: 55,
+                          }}
                         />
                         <TextInput
                           label="Carbohydrates"
                           value={carbs}
                           onChangeText={(text) => setCarbs(text)}
-                          style={{ marginTop: 10 }}
+                          style={{
+                            marginTop: 10,
+                            borderColor: COLORS.primary,
+                            borderWidth: 3,
+                            height: 55,
+                          }}
                         />
                         <TextInput
                           label="Proteins"
                           value={prots}
                           onChangeText={(text) => setProts(text)}
-                          style={{ marginTop: 10 }}
+                          style={{
+                            marginTop: 10,
+                            borderColor: COLORS.primary,
+                            borderWidth: 3,
+                            height: 55,
+                          }}
                         />
                         <TextInput
                           label="Fats"
                           value={fats}
                           onChangeText={(text) => setFats(text)}
-                          style={{ marginTop: 10 }}
+                          style={{
+                            marginTop: 10,
+                            borderColor: COLORS.primary,
+                            borderWidth: 3,
+                            height: 55,
+                          }}
                         />
                         <TextInput
                           label="Fibers"
                           value={fibers}
                           onChangeText={(text) => setFibers(text)}
-                          style={{ marginTop: 10 }}
+                          style={{
+                            marginTop: 10,
+                            borderColor: COLORS.primary,
+                            borderWidth: 3,
+                            height: 55,
+                          }}
                         />
                         <TextInput
                           label="Food Type"
                           value={food_type}
                           onChangeText={(text) => setFoodType(text)}
-                          style={{ marginTop: 10 }}
+                          style={{
+                            marginTop: 10,
+                            borderColor: COLORS.primary,
+                            borderWidth: 3,
+                            height: 55,
+                          }}
                         />
                         {/* <Picker
                           selectedValue={food_type}
@@ -323,20 +354,31 @@ export default function CameraScreen(props) {
                         <View
                           style={{
                             alignItems: "center",
-                            marginTop: 30,
+                            marginTop: 15,
                           }}
                         >
-                          <Button
-                            mode="contained"
-                            onPress={handleFinish}
+                          <TouchableOpacity
                             style={{
-                              width: "30%",
-                              marginTop: 10,
-                              marginBottom: 10,
+                              padding: 10,
+                              width: 100,
+                              backgroundColor: COLORS.black,
+                              borderRadius: 10,
+                              borderWidth: 1,
+                              borderColor: COLORS.primary,
                             }}
+                            onPress={handleFinish}
                           >
-                            Done
-                          </Button>
+                            <Text
+                              style={{
+                                ...FONTS.body2,
+                                color: COLORS.white,
+                                justifyContent: "center",
+                                textAlign: "center",
+                              }}
+                            >
+                              DONE
+                            </Text>
+                          </TouchableOpacity>
                         </View>
                       </ScrollView>
                     </SafeAreaView>
@@ -371,13 +413,28 @@ export default function CameraScreen(props) {
                             marginTop: 30,
                           }}
                         >
-                          <Button
-                            mode="contained"
+                          <TouchableOpacity
+                            style={{
+                              marginTop: 50,
+                              padding: 20,
+                              backgroundColor: COLORS.black,
+                              borderRadius: 10,
+                              borderWidth: 1,
+                              borderColor: COLORS.primary,
+                            }}
                             onPress={handleDoneClick}
-                            style={{ width: "30%" }}
                           >
-                            Proceed
-                          </Button>
+                            <Text
+                              style={{
+                                ...FONTS.body2,
+                                color: COLORS.white,
+                                justifyContent: "center",
+                                textAlign: "center",
+                              }}
+                            >
+                              PROCEED
+                            </Text>
+                          </TouchableOpacity>
                         </View>
                       </>
                     ) : (
@@ -408,7 +465,7 @@ const styles = StyleSheet.create({
   foodItem: {
     margin: 10,
     borderRadius: 7,
-    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   camera: {
     flex: 1,
@@ -447,7 +504,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.black,
     // backgroundColor: "white",
     bottom: 0,
     left: 0,
