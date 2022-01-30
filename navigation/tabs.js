@@ -7,7 +7,7 @@ import {
 import Svg, { Path } from "react-native-svg";
 import { isIphoneX } from "react-native-iphone-x-helper";
 
-import { Home, GoalScreen, Report } from "../screens";
+import { Home, GoalScreen, Report, CameraScreen } from "../screens";
 
 import { COLORS, icons } from "../constants";
 import Friends from "../screens/Friends";
@@ -148,7 +148,7 @@ const Tabs = () => {
 
       <Tab.Screen
         name="Camera"
-        component={CameraStackNavigator}
+        component={CameraScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image

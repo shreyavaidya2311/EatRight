@@ -42,26 +42,30 @@ const Report = () => {
         let total_lunch = 0;
         let total_snacks = 0;
         let total_dinner = 0;
-        foodData.breakfast.map((item) => {
-          if (item.date.substring(3, 10) === date) {
-            total_breakfast = total_breakfast + parseInt(item.calories);
-          }
-        });
-        foodData.lunch.map((item) => {
-          if (item.date.substring(3, 10) === date) {
-            total_lunch = total_lunch + parseInt(item.calories);
-          }
-        });
-        foodData.snacks.map((item) => {
-          if (item.date.substring(3, 10) === date) {
-            total_snacks = total_snacks + parseInt(item.calories);
-          }
-        });
-        foodData.dinner.map((item) => {
-          if (item.date.substring(3, 10) === date) {
-            total_dinner = total_dinner + parseInt(item.calories);
-          }
-        });
+        foodData.breakfast &&
+          foodData.breakfast.map((item) => {
+            if (item && item.date.substring(3, 10) === date) {
+              total_breakfast = total_breakfast + parseInt(item.calories);
+            }
+          });
+        foodData.lunch &&
+          foodData.lunch.map((item) => {
+            if (item && item.date.substring(3, 10) === date) {
+              total_lunch = total_lunch + parseInt(item.calories);
+            }
+          });
+        foodData.snacks &&
+          foodData.snacks.map((item) => {
+            if (item && item.date.substring(3, 10) === date) {
+              total_snacks = total_snacks + parseInt(item.calories);
+            }
+          });
+        foodData.dinner &&
+          foodData.dinner.map((item) => {
+            if (item && item.date.substring(3, 10) === date) {
+              total_dinner = total_dinner + parseInt(item.calories);
+            }
+          });
         total_calories =
           total_breakfast + total_dinner + total_snacks + total_lunch;
         setCalories(total_calories);
@@ -79,7 +83,7 @@ const Report = () => {
           ],
         };
         setBarData(temp_bar_data);
-        let temp_data = foodData.breakfast;
+        let temp_data = foodData.breakfast && foodData.breakfast;
         let combined_data = temp_data.concat(
           foodData.lunch,
           foodData.snacks,
@@ -87,7 +91,7 @@ const Report = () => {
         );
         let month_data = [];
         combined_data.map((item) => {
-          if (item.date.substring(3, 10) === date) {
+          if (item && item.date.substring(3, 10) === date) {
             month_data.push(item);
           }
         });

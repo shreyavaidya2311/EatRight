@@ -14,7 +14,7 @@ const GoalScreen = () => {
   const [goalName, setGoalName] = useState("");
   const [currentGoals, setCurrentGoals] = useState([]);
   const [calories, setCalories] = useState(null);
-  const [duration, setDuration] = React.useState("daily");
+  const [duration, setDuration] = useState("daily");
 
   useEffect(async () => {
     try {

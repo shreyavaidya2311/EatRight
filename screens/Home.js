@@ -40,7 +40,7 @@ const Home = ({ navigation }) => {
         );
         let today_data = [];
         combined_data.map((item) => {
-          if (item.date === date) {
+          if (item && item.date === date) {
             today_data.push(item);
           }
         });
@@ -54,16 +54,13 @@ const Home = ({ navigation }) => {
     let temp_object = { ...foodData };
     let new_object = temp_object[category.label];
     let today_data = [];
-    new_object.map((item) => {
-      if (item.date === date) {
-        today_data.push(item);
-      }
-    });
+    new_object &&
+      new_object.map((item) => {
+        if (item && item.date === date) {
+          today_data.push(item);
+        }
+      });
     setData(today_data);
-  }
-
-  function onSelectDate(element) {
-    setDate(element);
   }
 
   function renderHeader() {
