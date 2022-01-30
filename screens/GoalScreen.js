@@ -23,6 +23,7 @@ const GoalScreen = () => {
         `${global.config.host}/api/goals/all-goals/${user.email}`
       );
       setCurrentGoals(res.data.arr);
+      console.log(res.data.arr);
     } catch (error) {
       console.log(error);
     }
@@ -46,10 +47,38 @@ const GoalScreen = () => {
     setDuration(null);
     setCalories(null);
   };
-  const GoalCard = ({ name, duration, calories, current, final_amount }) => {
+  const handleRedeem = async (goal_id, duration_type, activity_type) => {
+    await axios.post(`${global.config.host}/api/goals/delete-goal`, {
+      email: user.email,
+      goal_id,
+    });
+    const points = duration_type === "weekly" ? 400 : 50;
+    await axios.post(`${global.config.host}/api/awards/add-reward`, {
+      email: user.email,
+      duration_type,
+      points,
+      activity_type,
+    });
+    let tmpArr = currentGoals;
+    tmpArr = tmpArr.filter((elem) => elem._id !== goal_id);
+    setCurrentGoals(tmpArr);
+  };
+  const GoalCard = ({
+    name,
+    duration,
+    calories,
+    current,
+    final_amount,
+    goal_id,
+    date,
+  }) => {
     let percent = Math.round(
       (parseInt(current) * 100) / parseInt(final_amount)
     );
+    let new_date = new Date(date).getTime();
+    let next_day = new_date + 1 * 24 * 60 * 60 * 1000;
+    let curr_date = new Date("2 February 2022").getTime();
+
     return (
       <View
         style={{
@@ -99,10 +128,10 @@ const GoalScreen = () => {
             //     borderColor: "#fff",
             //   }}
           >
-            {(fill) => <Text style={{ color: COLORS.white }}>{percent} %</Text>}
+            {() => <Text style={{ color: COLORS.white }}>{percent} %</Text>}
           </AnimatedCircularProgress>
         </View>
-        {percent === 100 && (
+        {curr_date > next_day && current <= calories && (
           <Button
             style={{
               marginTop: 15,
@@ -111,7 +140,7 @@ const GoalScreen = () => {
               alignSelf: "center",
             }}
             mode="contained"
-            onPress={() => console.log("Pressed")}
+            onPress={() => handleRedeem(goal_id, duration, name)}
           >
             Redeem
           </Button>
@@ -183,7 +212,7 @@ const GoalScreen = () => {
               marginBottom: 10,
             }}
           >
-            Current Goals-
+            Current Goals
           </Text>
 
           <FlatList
@@ -199,7 +228,9 @@ const GoalScreen = () => {
                   calories={item.final_goal}
                   current={item.current_amount}
                   //   current={520}
+                  goal_id={item._id}
                   final_amount={item.final_goal}
+                  date={item.date}
                 />
               );
             }}
