@@ -16,6 +16,7 @@ router.get("/get-ranks", async (req, res) => {
 
   return res.status(200).send({ ranks: tempArr });
 });
+
 router.post("/add-reward", async (req, res) => {
   let { duration_type, activity_type, points, email } = req.body;
 
@@ -34,7 +35,7 @@ router.post("/add-reward", async (req, res) => {
   try {
     result = await User.updateOne(
       { email: email },
-      { $push: { goals: obj._doc._id } }
+      { $push: { rewards: obj._doc._id }, $inc: { points: points } }
     );
   } catch (err) {
     return res.status(400).send({ msg: "Query failed" });
