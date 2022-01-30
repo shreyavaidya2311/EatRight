@@ -8,6 +8,7 @@ import DatePicker from "react-native-datepicker";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
+import { useIsFocused } from "@react-navigation/native";
 
 const Report = () => {
   const [data, setData] = useState();
@@ -15,6 +16,7 @@ const Report = () => {
   const [barData, setBarData] = useState();
   const [date, setDate] = useState("01-2022");
   const [calories, setCalories] = useState();
+  const isFocused = useIsFocused();
   const user = useAuth();
   let total_calories = 0;
   const screenWidth = Dimensions.get("window").width;
@@ -132,111 +134,113 @@ const Report = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header />
-      {loading ? (
-        <></>
-      ) : (
-        <>
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              marginBottom: 10,
-              marginTop: 20,
-            }}
-          >
-            <DatePicker
-              style={{ width: 200 }}
-              date={date}
-              mode="date"
-              format="MM-YYYY"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              customStyles={{
-                dateIcon: {
-                  display: "none",
-                },
-                dateInput: {
-                  borderColor: COLORS.white,
-                  borderRadius: 10,
-                },
-                dateText: {
-                  ...FONTS.h2,
-                  color: COLORS.primary,
-                },
+    isFocused && (
+      <SafeAreaView style={styles.container}>
+        <Header />
+        {loading ? (
+          <></>
+        ) : (
+          <>
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: 10,
+                marginTop: 20,
               }}
-              onDateChange={(value) => onSelectDate(value)}
+            >
+              <DatePicker
+                style={{ width: 200 }}
+                date={date}
+                mode="date"
+                format="MM-YYYY"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                customStyles={{
+                  dateIcon: {
+                    display: "none",
+                  },
+                  dateInput: {
+                    borderColor: COLORS.white,
+                    borderRadius: 10,
+                  },
+                  dateText: {
+                    ...FONTS.h2,
+                    color: COLORS.primary,
+                  },
+                }}
+                onDateChange={(value) => onSelectDate(value)}
+              />
+            </View>
+            <View
+              style={{ justifyContent: "space-between", flexDirection: "row" }}
+            >
+              <View>
+                <AnimatedCircularProgress
+                  size={120}
+                  width={15}
+                  fill={calories}
+                  duration={600}
+                  tintColor={COLORS.primary}
+                  lineCap="round"
+                  style={{ margin: 40 }}
+                >
+                  {(fill) => (
+                    <>
+                      <Text style={{ ...FONTS.h3, color: COLORS.white }}>
+                        {Math.round(fill)}
+                      </Text>
+                      <Text style={{ ...FONTS.body4, color: COLORS.white }}>
+                        calories
+                      </Text>
+                    </>
+                  )}
+                </AnimatedCircularProgress>
+              </View>
+
+              <View>
+                <AnimatedCircularProgress
+                  size={120}
+                  width={15}
+                  fill={calories * 1.3 + Math.random() + Math.random()}
+                  duration={600}
+                  tintColor={COLORS.primary}
+                  lineCap="round"
+                  style={{ margin: 40 }}
+                >
+                  {(fill) => (
+                    <>
+                      <Text style={{ ...FONTS.h3, color: COLORS.white }}>
+                        {Math.round(fill)}
+                      </Text>
+                      <Text style={{ ...FONTS.body4, color: COLORS.white }}>
+                        calories
+                      </Text>
+                    </>
+                  )}
+                </AnimatedCircularProgress>
+              </View>
+            </View>
+
+            <ProgressChart
+              data={data}
+              width={screenWidth}
+              height={210}
+              strokeWidth={16}
+              radius={18}
+              chartConfig={chartConfig}
+              hideLegend={false}
             />
-          </View>
-          <View
-            style={{ justifyContent: "space-between", flexDirection: "row" }}
-          >
-            <View>
-              <AnimatedCircularProgress
-                size={120}
-                width={15}
-                fill={calories}
-                duration={600}
-                tintColor={COLORS.primary}
-                lineCap="round"
-                style={{ margin: 40 }}
-              >
-                {(fill) => (
-                  <>
-                    <Text style={{ ...FONTS.h3, color: COLORS.white }}>
-                      {Math.round(fill)}
-                    </Text>
-                    <Text style={{ ...FONTS.body4, color: COLORS.white }}>
-                      calories
-                    </Text>
-                  </>
-                )}
-              </AnimatedCircularProgress>
-            </View>
-
-            <View>
-              <AnimatedCircularProgress
-                size={120}
-                width={15}
-                fill={calories * 1.3 + Math.random() + Math.random()}
-                duration={600}
-                tintColor={COLORS.primary}
-                lineCap="round"
-                style={{ margin: 40 }}
-              >
-                {(fill) => (
-                  <>
-                    <Text style={{ ...FONTS.h3, color: COLORS.white }}>
-                      {Math.round(fill)}
-                    </Text>
-                    <Text style={{ ...FONTS.body4, color: COLORS.white }}>
-                      calories
-                    </Text>
-                  </>
-                )}
-              </AnimatedCircularProgress>
-            </View>
-          </View>
-
-          <ProgressChart
-            data={data}
-            width={screenWidth}
-            height={210}
-            strokeWidth={16}
-            radius={18}
-            chartConfig={chartConfig}
-            hideLegend={false}
-          />
-          <BarChart
-            data={barData}
-            width={screenWidth}
-            height={200}
-            chartConfig={chartConfig}
-          />
-        </>
-      )}
-    </SafeAreaView>
+            <BarChart
+              data={barData}
+              width={screenWidth}
+              height={200}
+              chartConfig={chartConfig}
+            />
+          </>
+        )}
+      </SafeAreaView>
+    )
   );
 };
 

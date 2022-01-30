@@ -5,12 +5,14 @@ import { icons, COLORS, FONTS, images } from "../constants";
 import { Table, Row, Rows, TableWrapper } from "react-native-table-component";
 import "../config";
 import axios from "axios";
+import { useIsFocused } from "@react-navigation/native";
 
 const Friends = () => {
   const user = useAuth();
   const [data, setData] = useState([]);
   const [headers, _] = useState(["Rank", "Name", "Points"]);
   const [userPoints, setUserPoints] = useState(0);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     axios.get(`${global.config.host}/api/awards/get-ranks`).then((res) => {
@@ -26,94 +28,96 @@ const Friends = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          flexDirection: "row",
-          height: 50,
-          marginTop: Platform.OS == "android" ? 45 : 0,
-        }}
-      >
+    isFocused && (
+      <SafeAreaView style={styles.container}>
         <View
           style={{
             flexDirection: "row",
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
+            height: 50,
+            marginTop: Platform.OS == "android" ? 45 : 0,
           }}
         >
-          <Image
-            source={icons.logo}
+          <View
             style={{
-              width: 42,
-              height: 42,
-              marginRight: 10,
-            }}
-          />
-          <Text style={{ ...FONTS.largeTitle, color: COLORS.white }}>
-            Food Logger
-          </Text>
-        </View>
-      </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          height: 50,
-          marginTop: 85,
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Image
-            source={images.award}
-            style={{
-              width: 100,
-              height: 100,
-              resizeMode: "contain",
-            }}
-          />
-        </View>
-      </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          height: 50,
-          marginTop: 40,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text
-            style={{
-              color: COLORS.primary,
-              fontSize: 40,
+              flexDirection: "row",
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            {userPoints}
-          </Text>
+            <Image
+              source={icons.logo}
+              style={{
+                width: 42,
+                height: 42,
+                marginRight: 10,
+              }}
+            />
+            <Text style={{ ...FONTS.largeTitle, color: COLORS.white }}>
+              Food Logger
+            </Text>
+          </View>
         </View>
-      </View>
 
-      <View style={styles.table_container}>
-        <Table borderStyle={{ borderWidth: 2, borderColor: "#fff" }}>
-          <Row data={headers} style={styles.head} textStyle={styles.text} />
-          <Rows data={data} textStyle={styles.text} />
-        </Table>
-      </View>
-    </SafeAreaView>
+        <View
+          style={{
+            flexDirection: "row",
+            height: 50,
+            marginTop: 85,
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              source={images.award}
+              style={{
+                width: 100,
+                height: 100,
+                resizeMode: "contain",
+              }}
+            />
+          </View>
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            height: 50,
+            marginTop: 40,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                color: COLORS.primary,
+                fontSize: 40,
+              }}
+            >
+              {userPoints}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.table_container}>
+          <Table borderStyle={{ borderWidth: 2, borderColor: "#fff" }}>
+            <Row data={headers} style={styles.head} textStyle={styles.text} />
+            <Rows data={data} textStyle={styles.text} />
+          </Table>
+        </View>
+      </SafeAreaView>
+    )
   );
 };
 

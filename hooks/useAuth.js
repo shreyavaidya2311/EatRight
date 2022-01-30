@@ -18,7 +18,12 @@ import "../config";
 const config = {
   androidClientId: AUTH_ANDROID_CLIENT_ID,
   iosClientId: AUTH_IOS_CLIENT_ID,
-  scopes: ["profile", "email"],
+  scopes: [
+    "profile",
+    "email",
+    "https://www.googleapis.com/auth/fitness.nutrition.read",
+    "https://www.googleapis.com/auth/fitness.nutrition.write",
+  ],
   permissions: ["public_profile", "email", "gender", "location"],
 };
 export const AuthProvider = ({ children }) => {
