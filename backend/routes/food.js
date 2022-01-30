@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
+const Goal = require("../models/Goal.model");
 const mongoose = require("mongoose");
 
 router.post("/add-food", async (req, res) => {
@@ -42,6 +43,13 @@ router.post("/add-food", async (req, res) => {
     photo: url,
     date,
   };
+
+  let goals = await User.findOne({ email: req.body.email });
+  id_arr = goals.goals.map((elem) => mongoose.Types.ObjectId(elem));
+  await Goal.updateMany(
+    { _id: { $in: id_arr } },
+    { $inc: { current_amount: cals } }
+  );
 
   let mod_string = `foods.${food_type}`;
 
