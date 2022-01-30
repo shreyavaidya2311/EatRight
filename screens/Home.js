@@ -20,7 +20,7 @@ const Home = ({ navigation }) => {
   const [categories, setCategories] = useState(mealData);
   const [data, setData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [date, setDate] = useState("29-01-2022");
+  const [date, setDate] = useState("30-01-2022");
   const [open, setOpen] = useState(false);
   const [foodData, setFoodData] = useState({});
   const user = useAuth();

@@ -16,6 +16,7 @@ const Report = () => {
   const [barData, setBarData] = useState();
   const [date, setDate] = useState("01-2022");
   const [calories, setCalories] = useState();
+  const [junk, setJunk] = useState();
   const isFocused = useIsFocused();
   const user = useAuth();
   let total_calories = 0;
@@ -44,33 +45,47 @@ const Report = () => {
         let total_lunch = 0;
         let total_snacks = 0;
         let total_dinner = 0;
+        let total_junk = 0;
         foodData.breakfast &&
           foodData.breakfast.map((item) => {
             if (item && item.date.substring(3, 10) === date) {
               total_breakfast = total_breakfast + parseInt(item.calories);
+              if (item.calories > 300) {
+                total_junk = total_junk + item.calories;
+              }
             }
           });
         foodData.lunch &&
           foodData.lunch.map((item) => {
             if (item && item.date.substring(3, 10) === date) {
               total_lunch = total_lunch + parseInt(item.calories);
+              if (item.calories > 300) {
+                total_junk = total_junk + item.calories;
+              }
             }
           });
         foodData.snacks &&
           foodData.snacks.map((item) => {
             if (item && item.date.substring(3, 10) === date) {
               total_snacks = total_snacks + parseInt(item.calories);
+              if (item.calories > 300) {
+                total_junk = total_junk + item.calories;
+              }
             }
           });
         foodData.dinner &&
           foodData.dinner.map((item) => {
             if (item && item.date.substring(3, 10) === date) {
               total_dinner = total_dinner + parseInt(item.calories);
+              if (item.calories > 300) {
+                total_junk = total_junk + item.calories;
+              }
             }
           });
         total_calories =
           total_breakfast + total_dinner + total_snacks + total_lunch;
         setCalories(total_calories);
+        setJunk(total_junk);
         let meal_data = [];
         meal_data.push(total_breakfast);
         meal_data.push(total_lunch);
@@ -183,7 +198,12 @@ const Report = () => {
                   duration={600}
                   tintColor={COLORS.primary}
                   lineCap="round"
-                  style={{ margin: 40 }}
+                  style={{
+                    marginRight: 40,
+                    marginLeft: 40,
+                    marginTop: 40,
+                    marginBottom: 10,
+                  }}
                 >
                   {(fill) => (
                     <>
@@ -196,17 +216,36 @@ const Report = () => {
                     </>
                   )}
                 </AnimatedCircularProgress>
+                <View style={{ alignSelf: "center" }}>
+                  <Text style={{ ...FONTS.body4, color: COLORS.white }}>
+                    Total Calories
+                  </Text>
+                  <Text
+                    style={{
+                      ...FONTS.body4,
+                      color: COLORS.white,
+                      marginLeft: 10,
+                    }}
+                  >
+                    Consumed
+                  </Text>
+                </View>
               </View>
 
               <View>
                 <AnimatedCircularProgress
                   size={120}
                   width={15}
-                  fill={calories * 1.3 + Math.random() + Math.random()}
+                  fill={junk}
                   duration={600}
-                  tintColor={COLORS.primary}
+                  tintColor="#f36464"
                   lineCap="round"
-                  style={{ margin: 40 }}
+                  style={{
+                    marginRight: 40,
+                    marginLeft: 40,
+                    marginTop: 40,
+                    marginBottom: 10,
+                  }}
                 >
                   {(fill) => (
                     <>
@@ -219,6 +258,20 @@ const Report = () => {
                     </>
                   )}
                 </AnimatedCircularProgress>
+                <View style={{ alignSelf: "center" }}>
+                  <Text style={{ ...FONTS.body4, color: COLORS.white }}>
+                    Total Junk Food
+                  </Text>
+                  <Text
+                    style={{
+                      ...FONTS.body4,
+                      color: COLORS.white,
+                      marginLeft: 12,
+                    }}
+                  >
+                    Consumed
+                  </Text>
+                </View>
               </View>
             </View>
 
